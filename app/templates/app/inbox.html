@@ -1,0 +1,633 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} Inbox {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+    <!-- bootstrap-wysiwyg -->
+    <link href="/static/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+
+      <!--<div class="page-title">
+        <div class="title_left">
+          <h3>Inbox Design <small>Some examples to get you started</small></h3>
+        </div>
+
+        <div class="title_right">
+          <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Go!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>-->
+
+      <div class="clearfix"></div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Inbox<small>User Mail</small></h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="row">
+                <div class="col-sm-3 mail_list_column">
+                  <!--<button id="compose" class="btn btn-sm btn-success btn-block" type="button">COMPOSE</button>-->
+                  <div id="inbox_side"></div>
+                  <!--
+                  <a href="#">
+                    <div class="mail_list">
+                      <div class="left">
+                        <i class="fa fa-circle"></i> <i class="fa fa-edit"></i>
+                      </div>
+                      <div class="right">
+                        <h3>Dennis Mugo (CMO) <small>3.00 PM</small></h3>
+                        <p>Terrorist Attack at Pulau Ubin</p>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="#">
+                    <div class="mail_list">
+                      <div class="left">
+                        <i class="fa fa-star"></i>
+                      </div>
+                      <div class="right">
+                        <h3>Jane Nobert (CMO) <small>4.09 PM</small></h3>
+                        <p><span class="badge">To</span> Change of Command</p>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="#">
+                    <div class="mail_list">
+                      <div class="left">
+                        <i class="fa fa-circle-o"></i><i class="fa fa-paperclip"></i>
+                      </div>
+                      <div class="right">
+                        <h3>Musimbi Anne (PMO)<small>4.09 PM</small></h3>
+                        <p><span class="badge">CC</span>PM Lee Message</p>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="#">
+                    <div class="mail_list">
+                      <div class="left">
+                        <i class="fa fa-paperclip"></i>
+                      </div>
+                      <div class="right">
+                        <h3>Jon Dibbs (CMO)<small>4.09 PM</small></h3>
+                        <p>Additional Terrorist at Tampines</p>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="#">
+                    <div class="mail_list">
+                      <div class="left">
+                        .
+                      </div>
+                      <div class="right">
+                        <h3>Debbis & Raymond (CMO)<small>4.09 PM</small></h3>
+                        <p>Terrorist Attack in Tampines</p>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="#">
+                    <div class="mail_list">
+                      <div class="left">
+                        .
+                      </div>
+                      <div class="right">
+                        <h3>Debbis & Raymond (CMO)<small>4.09 PM</small></h3>
+                        <p>Final Reporting Order</p>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="#">
+                    <div class="mail_list">
+                      <div class="left">
+                        <i class="fa fa-circle"></i> <i class="fa fa-edit"></i>
+                      </div>
+                      <div class="right">
+                        <h3>Dennis Mugo (CMO) <small>3.00 PM</small></h3>
+                        <p>Reporting Order</p>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="#">
+                    <div class="mail_list">
+                      <div class="left">
+                        <i class="fa fa-star"></i>
+                      </div>
+                      <div class="right">
+                        <h3>Jane Nobert (PMO)<small>4.09 PM</small></h3>
+                        <p>Execution Order</p>
+                      </div>
+                    </div>
+                  </a>
+                  -->
+                </div>
+                <!-- /MAIL LIST -->
+
+                <!-- CONTENT MAIL -->
+                <div class="col-sm-9 mail_view">
+                  <div class="inbox-body" id="inbox_body">
+                              <div id="default" style="text-align:center">No E-mail Selected</div>
+                              <div id="inbox_content" style="display:none">
+                              <div class="mail_heading row">
+                                <div class="col-md-8">
+                                  <div class="btn-group">
+                                    <!--<button class="btn btn-sm btn-primary" type="button"><i class="fa fa-reply"></i> Reply</button>-->
+                                    <button class="btn btn-sm btn-default" type="button"  data-placement="top" data-toggle="tooltip" data-original-title="Forward"><i class="fa fa-share"></i></button>
+                                    <button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Print"><i class="fa fa-print"></i></button>
+                                    <button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Trash"><i class="fa fa-trash-o"></i></button>
+                                  </div>
+                                </div>
+                                <div class="col-md-4 text-right">
+                                  <p class="date" id="content_date"> &nbsp; <!-- 3:00 PM 12 FEB 2017 --></p>
+                                </div>
+                                <div class="col-md-12">
+                                  <h4 id="content_title"> Title <!--Terrorist Attack at Pulau Ubin --></h4>
+                                </div>
+                              </div>
+                              <div class="sender-info">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <strong id="content_sender">Dennis Mugo</strong>
+                                    <span id="content_email">(dennis.mugo@gov.sg)</span> to
+                                    <strong>me</strong>
+                                    <a class="sender-dropdown"><i class="fa fa-chevron-down"></i></a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="view-mail" id="content_message">
+                                Message
+                                <!--
+                                <p>There has been a terrorist attack at Pulau Ubin. There has been a report of 2 terrorists situated at north and south of the forest.</p>
+                                <p>Attached is the location of the terrorist. Please deploy xx for execution.</p>-->
+                              </div>
+                    <!--
+                              <div class="attachment">
+                                <p>
+                                  <span><i class="fa fa-paperclip"></i> 3 attachments — </span>
+                                  <a href="#">Download all attachments</a> |
+                                  <a href="#">View all images</a>
+                                </p>
+                                <ul>
+                                  <li>
+                                    <a href="#" class="atch-thumb">
+                                      <img src="/static/images/inbox.png" alt="img" />
+                                    </a>
+
+                                    <div class="file-name">
+                                      image-name.jpg
+                                    </div>
+                                    <span>12KB</span>
+
+
+                                    <div class="links">
+                                      <a href="#">View</a> -
+                                      <a href="#">Download</a>
+                                    </div>
+                                  </li>
+
+                                  <li>
+                                    <a href="#" class="atch-thumb">
+                                      <img src="/static/images/inbox.png" alt="img" />
+                                    </a>
+
+                                    <div class="file-name">
+                                      img_name.jpg
+                                    </div>
+                                    <span>40KB</span>
+
+                                    <div class="links">
+                                      <a href="#">View</a> -
+                                      <a href="#">Download</a>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <a href="#" class="atch-thumb">
+                                      <img src="/static/images/inbox.png" alt="img" />
+                                    </a>
+
+                                    <div class="file-name">
+                                      img_name.jpg
+                                    </div>
+                                    <span>30KB</span>
+
+                                    <div class="links">
+                                      <a href="#">View</a> -
+                                      <a href="#">Download</a>
+                                    </div>
+                                  </li>
+
+                                </ul>
+                              </div>
+                              -->
+                              <div class="btn-group">
+                                <!--<button class="btn btn-sm btn-primary" type="button"><i class="fa fa-reply"></i> Reply</button>-->
+                                <button class="btn btn-sm btn-default" type="button"  data-placement="top" data-toggle="tooltip" data-original-title="Forward"><i class="fa fa-share"></i></button>
+                                <button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Print"><i class="fa fa-print"></i></button>
+                                <button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Trash"><i class="fa fa-trash-o"></i></button>
+                              </div>
+
+                         </div>
+                  </div>
+
+                </div>
+                <!-- /CONTENT MAIL -->
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+
+                  {% load myfilters %}
+                  {% if request.user|is_Gen %}
+                      <span id="role" style="display:none">General</span>
+                  {% else %}
+                      <span id="role" style="display:none">Operator</span>
+                  {% endif %}
+
+
+    <!-- compose -->
+    <div class="compose col-md-6 col-xs-12">
+      <div class="compose-header">
+        New Message
+        <button type="button" class="close compose-close">
+          <span>×</span>
+        </button>
+      </div>
+
+      <div class="compose-body">
+        <div id="alerts"></div>
+
+        <div class="btn-toolbar editor" data-role="editor-toolbar" data-target="#editor">
+          <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font"><i class="fa fa-font"></i><b class="caret"></b></a>
+            <ul class="dropdown-menu">
+            </ul>
+          </div>
+
+          <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size"><i class="fa fa-text-height"></i>&nbsp;<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li>
+                <a data-edit="fontSize 5">
+                  <p style="font-size:17px">Huge</p>
+                </a>
+              </li>
+              <li>
+                <a data-edit="fontSize 3">
+                  <p style="font-size:14px">Normal</p>
+                </a>
+              </li>
+              <li>
+                <a data-edit="fontSize 1">
+                  <p style="font-size:11px">Small</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="btn-group">
+            <a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="fa fa-bold"></i></a>
+            <a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="fa fa-italic"></i></a>
+            <a class="btn" data-edit="strikethrough" title="Strikethrough"><i class="fa fa-strikethrough"></i></a>
+            <a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="fa fa-underline"></i></a>
+          </div>
+
+          <div class="btn-group">
+            <a class="btn" data-edit="insertunorderedlist" title="Bullet list"><i class="fa fa-list-ul"></i></a>
+            <a class="btn" data-edit="insertorderedlist" title="Number list"><i class="fa fa-list-ol"></i></a>
+            <a class="btn" data-edit="outdent" title="Reduce indent (Shift+Tab)"><i class="fa fa-dedent"></i></a>
+            <a class="btn" data-edit="indent" title="Indent (Tab)"><i class="fa fa-indent"></i></a>
+          </div>
+
+          <div class="btn-group">
+            <a class="btn" data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i class="fa fa-align-left"></i></a>
+            <a class="btn" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i class="fa fa-align-center"></i></a>
+            <a class="btn" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i class="fa fa-align-right"></i></a>
+            <a class="btn" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i class="fa fa-align-justify"></i></a>
+          </div>
+
+          <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><i class="fa fa-link"></i></a>
+            <div class="dropdown-menu input-append">
+              <input class="span2" placeholder="URL" type="text" data-edit="createLink" />
+              <button class="btn" type="button">Add</button>
+            </div>
+            <a class="btn" data-edit="unlink" title="Remove Hyperlink"><i class="fa fa-cut"></i></a>
+          </div>
+
+          <div class="btn-group">
+            <a class="btn" title="Insert picture (or just drag & drop)" id="pictureBtn"><i class="fa fa-picture-o"></i></a>
+            <input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" />
+          </div>
+
+          <div class="btn-group">
+            <a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)"><i class="fa fa-undo"></i></a>
+            <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)"><i class="fa fa-repeat"></i></a>
+          </div>
+        </div>
+
+        <div id="editor" class="editor-wrapper"></div>
+      </div>
+
+      <div class="compose-footer">
+        <button id="send" class="btn btn-sm btn-success" type="button">Send</button>
+      </div>
+    </div>
+    <!-- /compose -->
+  </div>
+
+<div id="gmap" style="display:none; width:100%; min-width:200px; height:300px;" />
+
+
+
+{% endblock content %}
+
+{% block javascripts %}
+ <script src="/static/vendors/jquery/dist/jquery.min.js"></script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?v=3key=AIzaSyDfxYDPnQB2t5UKVm4hPwN8PtxLLlQSHJg">
+  </script>
+  <script type="text/javascript">
+    var HTTP_URL = 'http://172.21.148.167:8000';
+    $(document).ready(function () {
+        role = document.getElementById('role').innerHTML;
+        var _url = HTTP_URL + '/api/actionPlan/';
+        if (role == "Operator") {
+            _url = HTTP_URL + '/api/operationOrder/'
+        }
+         $.ajax(
+           {
+               type: "GET",
+               contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+              // cache: false,
+                        //jsonp : false,
+                       // jsonpCallback: 'successCallback',
+               async: false,
+               url: _url,
+               success: function(data) {
+
+               console.log(data);
+                   console.log(data.length);
+                   var inbox_side = document.getElementById("inbox_side");
+
+                   if (data.length > 0) {
+
+                       //inbox_side.innerHTML = "<div class=\"mail_list\"><div class=\"left\"></div><i class=\"fa fa-circle\"></i> <i class=\"fa fa-edit\"></i></div>";
+                       for (var i = data.length-1; i>=0; i--) {
+                           addRow(inbox_side, data[i]);
+                        }
+                   } else {
+                        inbox_side.innerHTML = "<div style='text-align:center;'>No E-mail</div>";
+                   }
+               }
+           });
+
+        });
+
+    var role;
+
+    // Inbox mail list: Each mail item
+    function addRow(div, data) {
+          console.log("Adding Row");
+          console.log("Role = " + role);
+          if (role == 'General') {
+              var id = 1;
+              var name = "CMO";
+              var time = "just now";
+
+              var title = " Yolo swag ";
+
+              div.innerHTML += '<div><div onclick="getMail('+ data["CrisisID"] + ', ' + data["ActionPlanID"] + ');" class="mail_list" style="padding:5px;" id="mail_' + data["CrisisID"] + "_" + data["ActionPlanID"] + '" >'
+                                  + '<div class="right"><b>' + name + '</b> &nbsp; <small>' + time + '</small>'
+                                  + '<p>Crisis ' + data["CrisisID"] + ' Action Plan ' + data["ActionPlanID"] + " [" + sub(data["Status"]) + ']</p></div></div></div></a>';
+          } else {
+              var id = 1;
+              var name = "General";
+              var time = "just now";
+
+              var title = " Yolo swag ";
+              div.innerHTML += '<div><div onclick="getMail('+ data["CrisisID"] + ', ' + data["OpsID"] + ');" class="mail_list" style="padding:5px;" id="mail_' + data["CrisisID"] + "_" + data["OpsID"] + '" >'
+                              + '<div class="right"><b>' + name + '</b> &nbsp; <small>' + time + '</small>'
+                              + '<p>Crisis ' + data["CrisisID"] + ' Ops Order ' + data["OpsID"] + " [" + sub(data["ActionPlan"][0]["Status"]) + ']</p></div></div></div></a>';
+
+          }
+
+
+    }
+
+    function sub(text) {
+        var MAX_LENGTH = 7;
+        if (text.length > MAX_LENGTH) {
+            text = text.substring(0, MAX_LENGTH) + "...";
+        }
+        return text;
+    }
+
+    var previous_clicked = "";
+
+    var map = null;
+      var map_dom = null; var marker = null; var circle = null;
+    function initMap() {
+    console.log("init M ap ");
+
+              map = new google.maps.Map(document.getElementById('gmap'), {
+                  zoom: 13,
+                  minZoom: 12,
+                  center: new google.maps.LatLng(1, 103),
+                  mapTypeId: 'satellite'
+              });
+    }
+
+     google.maps.event.addDomListener(window, 'load', initMap);
+
+    function getMail(crisisID, ID) {
+        // ID is ActionPlanID if role = General
+        // or OpsID if role = Operator
+            var now = crisisID + "_" + ID;
+
+            if (now != previous_clicked) {
+                    console.log("Role = " + role);
+                      if (previous_clicked != "") {
+                          var prev = document.getElementById("mail_" + previous_clicked);
+                          prev.style.backgroundColor = "white";
+                      }
+                      previous_clicked = now;
+                      var curr = document.getElementById("mail_" + previous_clicked);
+                      curr.style.backgroundColor = "#d4e3fc";
+
+                      console.log("GetMAIL" + ID);
+                      var sender = "General";
+                      var _url = HTTP_URL + '/api/operationOrder/' + ID;
+                      if (role == 'General') {
+                          sender = "CMO";
+                          _url = HTTP_URL + '/api/actionPlan/' + ID;
+                      }
+
+                      console.log("URL " + _url);
+                       $.ajax(
+                     {
+                         type: "GET",
+                         contentType: "application/json; charset=utf-8",
+                          dataType: 'json',
+                        // cache: false,
+                                  //jsonp : false,
+                                 // jsonpCallback: 'successCallback',
+                         async: false,
+                         url: _url,
+                         success: function(data) {
+                          console.log("GetMAIL" + ID);
+                             console.log(data.length);
+                             if (data.length > 0) {
+                                 console.log(data[0]);
+                                 var d = document.getElementById("default");
+                                 d.style.display = "none";
+                                 var i = document.getElementById("inbox_content");
+                                 i.style.display = "block";
+                                 setMailContent(crisisID, ID, sender, data[0]);
+                             }
+                         }
+                     }
+                  );
+             }
+             var center = map.getCenter();
+
+             google.maps.event.trigger(map, "resize");
+             map.setCenter(center);
+
+    }
+
+    function fitBounds(markers) {
+          var bounds = new google.maps.LatLngBounds();
+          for (var i = 0; i < markers.length; i++) {
+           bounds.extend(markers[i].getPosition());
+          }
+
+          map.fitBounds(bounds);
+    }
+
+    function setMailContent(crisis_id, _id, sender, data) {
+        var latlng;
+        if (circle != null) circle.setMap(null);
+        if (marker != null) marker.setMap(null);
+
+        var s = document.getElementById("content_sender");
+        var t = document.getElementById("content_title");
+        var e = document.getElementById("content_email");
+        var m = document.getElementById("content_message");
+
+          var _loc = null; var body = "<div style=\"text-align:center; padding:3px;\">"; var latlng = null;
+        if (role == 'General') {
+            var datetime = data["Datetime"];
+            var _date = datetime.split("T")[0];
+            var _timeArr = datetime.split("T")[1];
+            var _time = _timeArr.substring(0, _timeArr.length - 1);
+            s.innerHTML = sender;
+            t.innerHTML = "Crisis " + crisis_id + " Action Plan " + _id + ' [' + data["Status"] + ']';
+            e.innerHTML = "<CMO@gov.sg>";
+            var body =  '<table id="content_table" style="padding:5px; border:1px solid #CCC; width:100%;"><trbody>'
+                        + '<tr style="border-bottom:1px solid #CCC;"><td colspan="5" style="text-align:center; padding:5px;"><b>CR#' + crisis_id + ' AP#' + _id + ': ' + data["Crisis Description"] + ' [' + data["Status"] + ']</b></td></tr>'
+                        + '<tr style="border-bottom:1px solid #CCC"><td style="max-width:150px; text-align:center; padding:3px; background-color:#c4e3f3"> Date/Time </td><td style="text-align:center; padding:5px;" colspan="4">' + _date + " " + _time + '</td></tr>'
+                        + '<tr style="border-bottom:1px solid #CCC;"><td style="max-width:150px; text-align:center; padding:3px; background-color:#c4e3f3"> Description </td><td style="padding:3px;" colspan="4">' + data["Action Plan Description"] + '</td></tr>';
+
+              _loc = data["Location"];
+          } else {
+            var datetime = data["ActionPlan"][0]["Datetime"];
+            var _date = datetime.split("T")[0];
+            var _timeArr = datetime.split("T")[1];
+            var _time = _timeArr.substring(0, _timeArr.length - 1);
+            s.innerHTML = sender;
+            t.innerHTML = "Crisis " + crisis_id + " Ops Order " + _id + " [" + data["ActionPlan"][0]["Status"] +"]";
+            e.innerHTML = "<General@gov.sg>";
+            var body =  '<table id="content_table" style="padding:5px; border:1px solid #CCC; width:95%;"><trbody>'
+                        + '<tr style="border-bottom:1px solid #CCC;"><td colspan="5" style="text-align:center; padding:5px;"><b>CR#' + crisis_id + ' OP#' + _id + ': ' + data["ActionPlan"][0]["CrisisDescription"] + '</b></td></tr>'
+                        + '<tr style="border-bottom:1px solid #CCC"><td style="max-width:150px; text-align:center; padding:3px; background-color:#c4e3f3"> Date/Time </td><td style="text-align:center; padding:5px;" colspan="4">' + _date + ' ' + _time + '</td></tr>'
+                        + '<tr style="border-bottom:1px solid #CCC;"><td style="max-width:150px; text-align:center; padding:3px; background-color:#c4e3f3"> Description </td><td style="padding:3px;" colspan="4">' + data["Description"] + '</td></tr>';
+            var dep = data["DeployForce"];
+            if (dep.length > 0) {
+                body += '<tr><td style="max-width:150px; text-align:center;border-bottom:1px solid #CCC; padding:3px; background-color:#c4e3f3" rowspan="' + (dep.length + 1)  + '" > Deployment </td><td style="padding:3px; text-align:center; border-right:1px solid #CCC; border-bottom:1px solid #CCC;"  colspan="3"><b> Force Types </b></td><td style="max-width:150px; text-align:center;border-bottom:1px solid #CCC; padding:3px; "><b> Strength </b></td></tr>';
+                for (var i = 0; i < dep.length; i++) {
+                    body += '<tr><td  colspan="3" style="border-bottom:1px solid #CCC; border-right:1px solid #CCC; text-align:center">' + dep[i]["ForceType"] + '</td><td style="border-bottom:1px solid #CCC; text-align:center;" >' + parseInt(dep[i]["Utilization"]) + '</td></tr>';
+                }
+            }
+              _loc = data["ActionPlan"][0]["Location"];
+          }
+          var markers = []
+          if (_loc.length > 0) {
+
+               body += '<tr ><td style="max-width:150px; border-bottom:1px solid #CCC; text-align:center; padding:3px; background-color:#c4e3f3" rowspan="' + (_loc.length + 2) + '"> Location </td><td style="padding:3px; border-right:1px solid #CCC; border-bottom:1px solid #CCC; text-align:center"><b> Category </b></td><td style="padding:3px; border-right:1px solid #CCC; border-bottom:1px solid #CCC;  text-align:center"><b> Lat </b></td><td style="max-width:150px; text-align:center; padding:3px;  border-right:1px solid #CCC; border-bottom:1px solid #CCC; text-align:center"><b> Long </b></td><td style="padding:3px; border-bottom:1px solid #CCC; text-align:center"><b> AOE </b></td></tr>';
+
+               for (var i = 0; i < _loc.length; i++) {
+                   loc = _loc[i];
+                   body += '<tr ><td style="padding:3px; border-right:1px solid #CCC; border-bottom:1px solid #CCC"> ' + loc["Category"] + ' </td><td style="padding:3px; border-bottom:1px solid #CCC; border-right:1px solid #CCC;">' + loc["Lat"].substring(0,8) + '</td><td style="padding:3px; border-bottom:1px solid #CCC; border-right:1px solid #CCC;"> ' + loc["Long"].substring(0,8) + ' </td><td style="padding:3px; border-bottom:1px solid #CCC;">' + loc["AOE"] + 'm</td></tr>';
+
+                  var latlng = new google.maps.LatLng(loc["Lat"], loc["Long"]);
+
+                  var marker = new google.maps.Marker({
+                    position: latlng,
+                    map: map,
+                    title: 'Lat: ' + loc["Lat"].substring(0,8) + ', Long: ' + loc["Long"].substring(0,8) + ' (' + loc["AOE"] + 'm)',
+                    id: crisis_id + "_" + i
+                  });
+
+                   var circle = new google.maps.Circle({
+                      map: map,
+                      radius: loc["AOE"],
+                      fillColor: '#AA0000'
+                    });
+                  circle.bindTo('center', marker, 'position');
+                  markers.push(marker);
+               }
+
+               body += '<tr><td colspan="4"><div id="map_widget" style="width:100%; padding:5px; height:320px;"></div> </td>';
+                  + '</tr>';
+
+              fitBounds(markers);
+
+              var center = map.getCenter();
+
+             google.maps.event.trigger(map, "resize");
+             map.setCenter(center);
+          }
+
+          body += '</trbody></table></div><BR><BR>';
+
+        if (role == 'General') {
+           body += "<BR><BR>"
+            + "<div style='text-align:center; padding:5px;'><a href='opsorderdetails?crisis_id=" + crisis_id + "&act_id=" +_id+ "' style='background-color: #3366ff; color:white; padding:8px; text-align:center'>Generate Ops Order</a></div><BR>"
+            + "<div style='text-align:center; padding:5px;'><a onclick='alert(\"SMS has been sent to Operational Ready NSmen.\");' style='background-color: #3366ff; color:white; padding:8px; text-align:center'>Deploy citizen</a></div><BR>"
+            +  '<div style="text-align:center; padding:5px; color:#999"> --- END OF ACTION PLAN &lt;CR#' + crisis_id + ' AP#' + _id + '&gt; --- </div>';
+        } else {
+            body += '<div style="text-align:center; padding:5px; color:#999"> --- END OF OPS ORDER &lt;CR#' + crisis_id + ' OP#' + _id + '&gt; --- </div>';
+        }
+            m.innerHTML = body;
+
+
+          if (_loc.length > 0) {
+              if (map_dom == null) map_dom = document.getElementById("gmap");
+              map_dom.style.display = "block";
+              map.setCenter(latlng);
+
+              var widget = document.getElementById("map_widget");
+               widget.appendChild(map_dom);
+          }
+
+
+    }
+
+  </script>
+  {{ block.super }}
+{% endblock javascripts %}

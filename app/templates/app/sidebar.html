@@ -1,0 +1,54 @@
+<div class="left_col scroll-view">
+  <div class="navbar nav_title" style="border: 0;">
+    <a href="index.html" class="site_title"><i class="fa fa-spinner"></i> <span>EF SYSTEM</span></a>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <!-- menu profile quick info -->
+  <div class="profile clearfix">
+    <div class="profile_pic">
+      <img src="/static/images/Kevin_Jones18.png" alt="..." class="img-circle profile_img">
+    </div>
+    <div class="profile_info">
+      <span>Welcome,</span>
+        {% if user.is_authenticated %}
+            <h2>{{ user.get_username }}</h2>
+        {% endif %}
+    </div>
+  </div>
+  <!-- /menu profile quick info -->
+
+  <br />
+
+  <!-- sidebar menu -->
+  <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+      <h3>General</h3>
+      <ul class="nav side-menu">
+        <li>
+			<a href="index.html"><i class="fa fa-home"></i>Home</a>
+		</li>
+	  </ul>
+	  {% load myfilters %}
+                  {% if request.user|is_Troop == False%}
+      <ul class="nav side-menu">
+        <li>
+			<a href="inbox.html"><i class="fa fa-inbox"></i>Inbox</a>
+		</li>
+	  </ul>
+	  
+      <!--<ul class="nav side-menu">-->
+        <!--<li>-->
+			<!--<a href="opsorder.html"><i class="fa fa-file-text-o"></i>Ops Order</a>-->
+		<!--</li>-->
+	  <!--</ul>-->
+        {% endif %}
+      <ul class="nav side-menu">
+        <li>
+			<a href="livefeed.html"><i class="fa fa-rss"></i>Live Feed</a>
+		</li>
+	  </ul>
+    </div>
+  </div>
+</div>

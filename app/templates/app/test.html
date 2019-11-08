@@ -1,0 +1,84 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} Inbox {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+    <!-- bootstrap-wysiwyg -->
+    <link href="/static/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+    <link href="/static/build/css/opsorder.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+<div class="clearfix"></div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Operation Orders</h2>
+              <ul class="nav navbar-right panel_toolbox">
+                <!--<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                  </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>-->
+                  <a href="opsorderdetail.html">
+                    <button id="compose" class="btn btn-sm btn-success btn-block" type="button">
+                      <i class="fa fa-plus"></i> NEW
+                    </button>
+                  </a>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a href="#">
+                            <div class="mail_list">
+                                <div class="left">
+                                    <h3>OPS#0013</h3>
+                                    <i class="fa fa-map-marker"></i> Bedok <br/>
+                                    <i class="fa fa-users"></i> SCDF
+                                    <h4>Suspicious Bomb Threat</h4>
+                                </div>
+                                <div class="right">
+                                    <small>1 April 2017, 3.00 PM</small>
+                                    <p><i class="fa fa-check"></i> Completed</p>
+                                </div>
+                            </div>
+                            <div class="mail_list">
+                                <div class="left">
+                                    <h3>OPS#0014</h3>
+                                    <i class="fa fa-map-marker"></i> Bedok <br/>
+                                    <i class="fa fa-users"></i> SAF
+                                    <h4>Suspicious Bomb Threat</h4>
+                                </div>
+                                <div class="right">
+                                    <small>1 April 2017, 3.00 PM</small>
+                                    <p><i class="fa fa-spinner"></i> In Progress</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+{% endblock javascripts %}

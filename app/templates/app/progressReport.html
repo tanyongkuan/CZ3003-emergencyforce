@@ -1,0 +1,160 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} Operation Order Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+    <!-- bootstrap-wysiwyg -->
+    <link href="/static/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+    <link href="/static/build/css/opsorder.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+<div class="clearfix"></div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Progress Report Details</h2>
+              <ul class="nav navbar-right panel_toolbox">
+                  <button id="compose" class="btn btn-sm btn-success btn-block" type="button" onclick="sendUpdate(); return false;">
+                      <i class="fa fa-plus"></i> SEND
+                  </button>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Report Type</label>
+                            <select id="op_type" class="form-control">
+                                <option value="Notification">Notification</option>
+                                <option value="Request">Request</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Affected Radius</label>
+                            <input type="text" id="tb_rad" class="form-control" >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Total Injured</label>
+                            <input type="text" id="tb_inj" class="form-control" >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Total Deaths</label>
+                            <input type="text" id="tb_death" class="form-control" >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Total Duration</label>
+                            <input type="text" id="tb_dur" class="form-control" >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Description</label>
+                            <textarea id="tb_desc" class="form-control" rows="6" placeholder="Enter Description"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+
+<script type="text/javascript">
+    $(document).ready( function() {
+        <!--$.ajax({-->
+            <!--type: "GET",-->
+            <!--dataType: 'json',-->
+            <!--url: 'http://127.0.0.1:8000/api/actionPlan/',-->
+            <!--success: function (data) {-->
+                <!--alert("Hi");-->
+            <!--}-->
+        <!--});-->
+    });
+
+    function sendUpdate() {
+        var d = new Date();
+        {% load myfilters %}
+        var crisisID = {{request|getQuery}};
+        var actID = {{request|getActID}};
+        var opsID = {{request|getOpsID}};
+        var saf = {{request|getSAF}};
+        var scdf = {{request|getSCDF}};
+        var spf = {{request|getSPF}};
+        var cleaner = {{request|getCleaner}};
+
+        var troopsUtilization = "[";
+
+        if(saf != 0)
+            troopsUtilization += '{"name":"SAF", "utilization":' + saf/10 + '},';
+        if(scdf != 0)
+            troopsUtilization += '{"name":"SCDF", "utilization":' + scdf/10 + '},';
+        if(spf != 0)
+            troopsUtilization += '{"name":"SPF", "utilization":' + spf/10 + '},';
+        if(cleaner != 0)
+            troopsUtilization += '{"name":"Cleaner", "utilization":' + cleaner/10 + '},';
+
+        troopsUtilization = troopsUtilization.slice(0,-1);
+        troopsUtilization += "]";
+        var utilization = JSON.parse(troopsUtilization);
+
+        var date = d.toISOString();
+        var t = document.getElementById("op_type").selectedIndex;
+        var type = document.getElementsByTagName("option")[t].value;
+        var radius = parseInt(document.getElementById("tb_rad").value);
+        var totalInjured = parseInt(document.getElementById("tb_inj").value);
+        var totalDeaths = parseInt(document.getElementById("tb_death").value);
+        var totalDuration = document.getElementById("tb_dur").value;
+        var description = document.getElementById("tb_desc").value;
+
+        var dataDB = {"OpsID": opsID, "Date_time": date, "Type": type, "Description": description, "Statistics": [{ "AffectedAOE": radius, "TotalInjured": totalInjured, "TotalDeaths": totalDeaths, "TotalDuration": totalDuration }]}
+        var cmoDB = { "crisis": crisisID, "ActionPlanID": actID, "datetime": date, "description": description, "type": type, "statistics": { "AffectedRadius": radius, "TotalInjured": totalInjured, "TotalDeaths": totalDeaths, "TotalDuration": totalDuration, "force": utilization } }
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            data: JSON.stringify( dataDB ),
+            dataType: 'json',
+            url: 'http://172.21.148.167:8000/api/createUpdate/',
+            success: function (data) {
+
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            data: JSON.stringify( cmoDB ),
+            dataType: 'json',
+            url: 'http://172.21.148.168/api/ef/',
+            success: function (data) {
+                new PNotify({
+                        title: 'Success',
+                        text: 'Progress Report has been sent to CMO!',
+                        type: 'success',
+                        styling: 'bootstrap3'
+                    });
+            },
+            error: function(a,b,c){
+                console.log(a);
+                console.log(b);
+                console.log(c);
+            }
+        });
+    };
+</script>
+{% endblock javascripts %}

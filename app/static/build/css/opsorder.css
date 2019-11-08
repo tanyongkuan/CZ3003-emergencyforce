@@ -1,0 +1,10 @@
+.mail_list .right {
+    width: 20%;
+    float: left;
+}
+
+.mail_list .left {
+    width: 75%;
+    float: left;
+    margin-right: 5%;
+}

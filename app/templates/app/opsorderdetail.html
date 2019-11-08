@@ -1,0 +1,215 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} Operation Order Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+    <!-- bootstrap-wysiwyg -->
+    <link href="/static/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+    <link href="/static/build/css/opsorder.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+<div class="clearfix"></div>
+
+
+    <div id="values">
+        <p data-value-id='{{ integer_value.pk }}'>
+            <div class="col-md-6">
+            <div class="form group">
+                <select id="ddlActionPlan" class="form-control" onchange="changeMe(this.value)">
+                    {% load myfilters %}
+                {% for integer_value in integer_values %}
+                    {% if integer_value.CrisisID  == request|getQuery %}
+                        <option value="{{integer_value.ActionPlanID}}">Action Plan {{integer_value.ActionPlanID}} [{{integer_value.Status}}]</option>
+                    {% endif %}
+                {% endfor %}
+                </select>
+        <br/>
+            </div>
+            </div>
+            {% for integer_value in integer_values %}
+                    {% with integer_value.ActionPlanID as ActionPlanID %}
+                    {% with integer_value.CrisisID as CrisisID %}
+                    {% with integer_value.ActionPlanDescription as ActionPlanDescription %}
+                    {% with integer_value.CrisisDescription as CrisisDescription %}
+                    {% with integer_value.Date_time as Date_time %}
+                    {% with integer_value.Status as Status %}
+
+                  <div class="row" id="item{{integer_value.ActionPlanID}}" style="display:none">
+                    <div class="col-md-12">
+                      <div class="x_panel">
+                        <div class="x_title">
+                          <h2>Operation Order Details</h2>
+                          <ul class="nav navbar-right panel_toolbox">
+                              <button onclick="sendItem({{CrisisID}},{{ActionPlanID}})" id="compose" class="btn btn-sm btn-success btn-block" type="button">
+                                  <i class="fa fa-plus"></i> SEND
+                              </button>
+                          </ul>
+                          <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-7">
+                                        <div class="mail_list">
+                                            <h3>Action Plan <label>{{integer_value.ActionPlanID }} - {{CrisisDescription}} [{{Status}}]</label> </h3>
+                                            {% for integer_value3 in integer_values3 %}
+                                            {% if integer_value3.ActionPlanID.ActionPlanID  == ActionPlanID %}
+                                                <i class="fa fa-list"></i> {{integer_value3.Category}}<br/>
+                                            {% endif %}{% endfor %}
+
+                                            {% for integer_value3 in integer_values3 %}
+                                                {% if integer_value3.ActionPlanID.ActionPlanID  == ActionPlanID %}
+                                                    <i class="fa fa-map-marker"></i>
+                                                    ({{integer_value3.Lat}},{{integer_value3.Long}})
+                                                    <br/>
+                                                {% endif %}{% endfor %}
+                                            {% for integer_value2 in integer_values2 %}
+                                                {% if integer_value2.ActionPlanID.ActionPlanID  == ActionPlanID %}
+                                                    <i class="fa fa-users"></i>
+                                                    {{ integer_value2.ForceType }} : {{integer_value2.Recommended }}% - {{integer_value2.Max }}%
+                                                    <br/>
+                                                {% endif %}{% endfor %}
+                                            <i class="fa fa-calendar"></i> {{Date_time}}<br/><br/>
+                                            <p>{{ActionPlanDescription}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-5" class="mail_view">
+                                        <div class="inbox-body">
+                                            <button id="location" class="btn btn-sm btn-default btn-block" type="button" data-toggle="modal" data-target=".location-model"><i class="fa fa-map-marker"></i> Location</button>
+                                            <!-- Start of location modal -->
+                                            <div  class="modal fade location-model" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-sm">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                                                            </button>
+                                                            <h4 class="modal-title" id="myModalLabel2">Location</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <input id="middle-name" onchange="savePopupValues({{CrisisID}}, 'l')" id="{{CrisisID}}_LOC" class="form-control" type="text" name="middle-name" placeholder="Enter Location">
+                                                            <br/>
+                                                            <div id="map" style="height:200px"></div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Confirm</button>
+                                                            <button type="button" class="btn btn-primary">Cancel</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end of location modal -->
+                                            <button onclick="var d=document.getElementById('deployment_popup{{ActionPlanID}}');d.style.display=(d.style.display=='none'?'block':'none')" id="deploy" type="button" class="btn btn-sm btn-default btn-block"> <!--data-toggle="modal{{CrisisID}}" data-target=".deployment-model{{CrisisID}}"-->Deployment</button>
+                                            <!-- Start of deployment modal -->
+                                            <div id="deployment_popup{{ActionPlanID}}" style="position:absolute; z-index:1000; display:none;"> <!-- class="modal{{CrisisID}} fade deployment-model{{CrisisID}}" tabindex="2000" role="dialog" aria-hidden="true"-->
+                                               <!-- <div class="modal-dialog modal-sm">-->
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                                                            </button>
+                                                            <h4 class="modal-title" id="myModalLabel3">Deployment</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {% for integer_value4 in integer_values4 %}
+                                                                <div class="mail_list">
+                                                                    <div class="left">
+                                                                        <i class="fa fa-users"></i> {{ integer_value4.ForceType }} <br/>
+                                                                        <h5>Currently: {{ integer_value4.TotalTroops }} platoon</h5>
+                                                                    </div>
+                                                                    <div class="right">
+                                                                        <input id="{{ActionPlanID}}_{{ integer_value4.ForceType }}" class="form-control" type="text" name="middle-name" />
+                                                                    </div>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                             <button type="button" onclick="var d=document.getElementById('deployment_popup{{ActionPlanID}}');d.style.display='none'" class="btn btn-default" data-dismiss="modal">Confirm</button>
+                                                            <button type="button" onclick="var d=document.getElementById('deployment_popup{{ActionPlanID}}');d.style.display='none'" class="btn btn-primary">Cancel</button>
+                                                        </div>
+                                                    </div>
+                                               <!-- </div> -->
+                                            </div>
+                                            <!-- end of deployment modal -->
+                                            <textarea ID="txt_description" class="form-control" rows="6" placeholder="Enter Description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+            </div>
+{% endwith %} {% endwith %} {% endwith %} {% endwith %} {% endwith %} {% endwith %} </p>  {% endfor %} </div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="static/build/js/opsorder.js" type="text/javascript"></script>
+<script>
+      function initMap() {
+        var uluru = {lat: -25.363, lng: 131.044};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 6,
+          center: uluru,
+		  mapTypeId: 'satellite'
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+
+      }
+      var HTTP_URL = 'http://172.21.148.167:8000';
+      function sendItem(crisis_id,action_id) {
+            addOrder(crisis_id,action_id);
+            var _url = HTTP_URL + '/generateoporderAPI/';
+            $.ajax(
+            {
+            type:'POST',
+            headers: {"X-CSRFToken": "{{csrf_token}}"},
+            url:_url,
+		    data:{
+                Title: "New operation order",
+                Description: "A new operation order has been created",
+                ToWho: "HQ Operators",
+                <!--Require token to send ajax and url is / = localhost abcd / last / is for ajax-->
+            },
+            success:function(){
+                //location.reload();
+                //$('html, body').animate({ scrollTop: 0 }, 0);
+                new PNotify({
+                        title: 'Success',
+                        text: 'Operation Order has been submitted to Operator',
+                        type: 'success',
+                        styling: 'bootstrap3'
+                    });
+            }
+		    });
+      }
+
+      var prevShow = -1;
+      function changeMe(v) {
+
+                if (prevShow > -1) {
+
+                     var xx = document.getElementById("item" + prevShow);
+                     xx.style.display = "none";
+                     console.log("prevShow " +prevShow);
+                }
+            var x = document.getElementById("item" + v);
+            x.style.display = "block";
+            prevShow = v;
+                     console.log("v " +v);
+      }
+      $("#ddlActionPlan").val({{request|getActID}});
+      changeMe($("#ddlActionPlan").val());
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfxYDPnQB2t5UKVm4hPwN8PtxLLlQSHJg&callback=initMap">
+    </script>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+{% endblock javascripts %}

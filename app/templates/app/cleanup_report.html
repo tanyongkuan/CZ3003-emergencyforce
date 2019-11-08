@@ -1,0 +1,120 @@
+
+
+{% extends "app/base_site.html" %}
+
+{% block cssStyleAndJS %}
+    {% load staticfiles %}
+{% endblock %}
+
+{% block title %} Form Advanced {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <!-- FullCalendar -->
+  <link href="/static/vendors/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet">
+  <link href="/static/vendors/fullcalendar/dist/fullcalendar.print.css" rel="stylesheet" media="print">
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="page-title">
+        <div class="title_left">
+          <h3>Generate Clean Up Report</h3>
+        </div>
+
+        <div class="title_right">
+          <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Go!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+
+  <div class="panel-group">
+    <div class="panel panel-primary">
+        <div class="panel-heading clearfix">EF General CleanUp Form
+        </div>
+        <div class="panel-body" id="panel-form">
+            <form id="operator_form" name="operator_form" method='POST' action='' enctype='multipart/form-data'>
+                {% csrf_token %}
+                <!--just 1 at the starting will do. csrf token-->
+                <div class="left-div">
+                    <input type="text" id="name" name="name" value="" placeholder="Deployment ID" tabindex="1" autofocus="autofocus" />
+                </div>
+                <p></p>
+
+
+                <div class="left-div">
+                    <input type="text" id="outcome" name="description" value="" placeholder="Outcome" size="100" tabindex="10" autofocus="autofocus" />
+                </div>
+
+                <p></p>
+
+
+                <div class="left-div">
+                    <input type="text" id="datetime" name="description" value="" placeholder="asd" size="100" tabindex="10" autofocus="autofocus" />
+                </div>
+
+                <div class="button-div">
+                    <button id="sendReport" type="submit" class="btn btn-primary">Send Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+    $(document).on('submit','#operator_form',function(e){
+    e.preventDefault();
+    $.ajax({
+        type:'POST',
+        url:'/generatecleanup_order/',
+        data:{
+            name: $('#name').val(),
+            deployment: $('#deployment').val(),
+            date_time: $('#date_time').val(),
+            description: $('#description').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            <!--Require token to send ajax and url is / = localhost abcd / last / is for ajax-->
+        },
+        success:function(){
+            alert("success");
+            location.reload();
+            $('html, body').animate({ scrollTop: 0 }, 0);
+        }
+    });
+});
+</script>
+
+{% endblock javascripts %}
+
+
+{% block extra_body %}
+{% endblock %}

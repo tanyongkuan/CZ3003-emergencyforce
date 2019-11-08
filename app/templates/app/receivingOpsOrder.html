@@ -1,0 +1,190 @@
+{% extends "app/base_site.html" %}
+
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="page-title">
+        <div class="title_left">
+          <h3>Ops Order <small>Click to add/edit events</small></h3>
+        </div>
+
+        <div class="title_right">
+          <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Go!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+
+  <div class="panel-group">
+    <div class="panel panel-primary">
+        <div class="panel-heading clearfix">EF Operator Form
+        </div>
+        <div class="panel-body" id="panel-form">
+
+
+            <!--code here in view and name.CallerName must be same as model-->
+    <div id="values">
+        {% for integer_value in integer_values %}
+            <p data-value-id='{{ integer_value.pk }}'>
+                <label>{{integer_value.id }}</label>
+                <label>{{integer_value.CallerName }}</label>
+                <label>{{integer_value.Location  }}</label>
+                <label>{{integer_value.Deployment  }}</label>
+                <label>{{integer_value.DeploymentAmount  }}</label>
+                <label>{{integer_value.Date_time  }}</label>
+                <label>{{integer_value.Description   }}</label>
+            </p>
+        {% empty %}
+            <p class="empty">No values yet.</p>
+        {% endfor %}
+    </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+    <!-- calendar modal -->
+    <div id="CalenderModalNew" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">New Calendar Entry</h4>
+          </div>
+          <div class="modal-body">
+            <div id="testmodal" style="padding: 5px 20px;">
+              <form id="antoform" class="form-horizontal calender" role="form">
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Title</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="title" name="title">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Description</label>
+                  <div class="col-sm-9">
+                    <textarea class="form-control" style="height:55px;" id="descr" name="descr"></textarea>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default antoclose" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary antosubmit">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CalenderModalEdit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel2">Edit Calendar Entry</h4>
+          </div>
+          <div class="modal-body">
+
+            <div id="testmodal2" style="padding: 5px 20px;">
+              <form id="antoform2" class="form-horizontal calender" role="form">
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Title</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="title2" name="title2">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Description</label>
+                  <div class="col-sm-9">
+                    <textarea class="form-control" style="height:55px;" id="descr2" name="descr"></textarea>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary antosubmit2">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="fc_create" data-toggle="modal" data-target="#CalenderModalNew"></div>
+    <div id="fc_edit" data-toggle="modal" data-target="#CalenderModalEdit"></div>
+    <!-- /calendar modal -->
+  </div>
+
+
+
+<script>
+            $(function () {
+            alert("1");
+            console.log("TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT ");
+            var ws_path =  "/stream/";
+            console.log("Connecting to " + ws_path);
+
+            var webSocketBridge = new channels.WebSocketBridge();
+            webSocketBridge.connect(ws_path);
+            webSocketBridge.listen();
+            webSocketBridge.demultiplex('intval', function(payload, streamName) {
+                // Handle different actions
+                if (payload.action == "create") {
+                    // Create the new integer value only need to edit here and payload is already done for us inside models
+                    var content = "<p data-value-id='" + payload.pk + "'><label>" + payload.data.CallerName + " "+ payload.data.Location+ " " +
+                    payload.data.Deployment+ " " + payload.data.DeploymentAmount+ payload.data.Date_time + payload.data.Description;
+                    $("#values").append(content);
+                    // Remove empty message
+                    $("#values .empty").remove();
+                } else if (payload.action == "update") {
+                    $("p[data-value-id=" + payload.pk + "] label").text(payload.data.CallerName);
+                } else if (payload.action == "delete") {
+                    $("p[data-value-id=" + payload.pk + "]").remove();
+                } else {
+                    console.log("Unknown action " + payload.action);
+                }
+            });
+
+            // Bind changing the slider value
+            $("#values").on("change", "input", function () {
+                $(this).parent().find("output").val($(this).val());
+                webSocketBridge.stream('intval').send({
+                    "pk": $(this).parent().attr("data-value-id"),
+                    "action": "update",
+                    "data": {
+                        "value": $(this).val(),
+                    }
+                });
+            });
+
+            // Helpful debugging
+            webSocketBridge.socket.addEventListener('open', function() { console.log("Connected to notification socket"); });
+            webSocketBridge.socket.addEventListener('close', function() { console.log("Disconnected to notification socket"); });
+        });
+</script>
+
+
+{% endblock %}
+
